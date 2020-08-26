@@ -178,7 +178,8 @@ def _myplot(align_dist_df, x_dist_df, save_fp):
     ax.plot(np.linspace(0, 1, 100), np.linspace(0, 1, 100), 'r')
     ax.set_xlabel('alignment distance', fontsize=20)
     ax.set_ylabel('SENSE', fontsize=20)
-
+    ax.set_title('R2 score: {}'.format(r2_score(align_dist_df[1], x_dist_df[1])))
+    
     cbar_ax = fig.add_axes([0.95, 0.1, 0.05, 0.8])
     cbar_ax.tick_params(axis='both', which='major', labelsize=15)
     cbar = fig.colorbar(hb, cax=cbar_ax)
@@ -198,7 +199,6 @@ def _main():
     nw_df = pd.read_csv(constant.EVAL_DIS_PATH, sep='\t', header=None)
     my_df = pd.read_csv(constant.OUTPUT_DIS_PATH, sep='\t', header=None)
     _myplot(nw_df, my_df, constant.PLOT_PATH)
-    print ("R2_score=", r2_score(my_df[1], nw_df[1]))
     model.save("model.h5")
 
 # main

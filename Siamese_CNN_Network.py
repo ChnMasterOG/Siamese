@@ -169,15 +169,15 @@ def _jaccarddist(embedding1, embedding2):
     return 1 - np.sum(np.minimum(embedding1, embedding2)) / np.sum(np.maximum(embedding1, embedding2)) 
 
 # plot function
-def _myplot(align_dist_df, x_dist_df, save_fp):
+def _myplot(align_dist_df, x_dist_df, save_fp, xlabel, ylabel):
     fig, ax = plt.subplots(figsize=(10,10))
     ax.tick_params(axis='both', which='major', labelsize=15)
     hb = ax.hexbin(align_dist_df[1], x_dist_df[1], 
                    gridsize=200, bins='log', cmap='Blues', extent=(0, 1, 0, 1),
                    vmin=1, vmax=4)
     ax.plot(np.linspace(0, 1, 100), np.linspace(0, 1, 100), 'r')
-    ax.set_xlabel('alignment distance', fontsize=20)
-    ax.set_ylabel('SENSE', fontsize=20)
+    ax.set_xlabel(xlabel, fontsize=20)
+    ax.set_ylabel(ylabel, fontsize=20)
     ax.set_title('R2 score: {}'.format(r2_score(align_dist_df[1], x_dist_df[1])))
     
     cbar_ax = fig.add_axes([0.95, 0.1, 0.05, 0.8])
@@ -198,8 +198,9 @@ def _main():
     _writedist(embeddings_model, './dataset/eval.fa', constant)
     nw_df = pd.read_csv(constant.EVAL_DIS_PATH, sep='\t', header=None)
     my_df = pd.read_csv(constant.OUTPUT_DIS_PATH, sep='\t', header=None)
-    _myplot(nw_df, my_df, constant.PLOT_PATH)
+    _myplot(nw_df, my_df, constant.PLOT_PATH, 'alignment distance', 'SENSE')
     model.save("model.h5")
 
 # main
-_main()
+if __name__ == '__main__':
+    _main()
